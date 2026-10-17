@@ -5,6 +5,10 @@ based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-17
+
+ - Fix fatal stack overflow on the minimum signed value and day rounding of the largest spans
+
 ### Fixed
 
 - `Format(math.MinInt64)` and `Days(math.MinInt)` no longer recurse until

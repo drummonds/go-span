@@ -1,0 +1,6 @@
+/docs/**/*.html
+.task/
+
+# task-plus private local config
+task-plus.local.yaml
+.tp-release-comment

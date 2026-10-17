@@ -5,6 +5,7 @@ package span
 
 import (
 	"fmt"
+	"math"
 	"time"
 )
 
@@ -24,8 +25,12 @@ const (
 //	1y (365d) and up years, days            1y23d
 //
 // Below a day the result is a Go duration string, so time.ParseDuration
-// reads it back. A negative span is the positive one with a sign.
+// reads it back. A negative span is the positive one with a sign; the
+// minimum Duration, whose magnitude does not fit, shows the maximum's.
 func Format(d time.Duration) string {
+	if d == math.MinInt64 {
+		d++
+	}
 	if d < 0 {
 		return "-" + Format(-d)
 	}
@@ -74,8 +79,14 @@ func resolution(d time.Duration) time.Duration {
 // never shows hours.
 func Days(n int) string {
 	if n < 0 {
-		return "-" + Days(-n)
+		// Negating the minimum int wraps, but read unsigned it is still
+		// the magnitude.
+		return "-" + days(uint64(-int64(n)))
 	}
+	return days(uint64(n))
+}
+
+func days(n uint64) string {
 	if n < 365 {
 		return fmt.Sprintf("%dd", n)
 	}

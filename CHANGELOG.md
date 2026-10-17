@@ -5,6 +5,12 @@ based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- `Format(math.MinInt64)` and `Days(math.MinInt)` no longer recurse until
+  a fatal stack overflow. `Days` gives the exact magnitude; `Format` gives
+  the maximum Duration's, the nearest that fits (#2).
+
 ## [0.1.0] - 2026-10-17
 
  - First release: span.Format and span.Days, a duration only as precise as a reader needs

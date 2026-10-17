@@ -1,6 +1,8 @@
 package span_test
 
 import (
+	"math"
+	"strconv"
 	"testing"
 	"time"
 
@@ -76,5 +78,20 @@ func TestDays(t *testing.T) {
 		if got := span.Days(c.n); got != c.want {
 			t.Errorf("Days(%d) = %q, want %q", c.n, got, c.want)
 		}
+	}
+}
+
+// The minimum signed value has no positive counterpart, so negating it
+// overflows. Format shows the nearest representable magnitude with a sign;
+// Days, counting whole days, shows the exact one.
+func TestMinimumValue(t *testing.T) {
+	if got, want := span.Format(math.MinInt64), "-"+span.Format(math.MaxInt64); got != want {
+		t.Errorf("Format(MinInt64) = %q, want %q", got, want)
+	}
+	if strconv.IntSize != 64 {
+		t.Skip("Days expectation is for 64-bit int")
+	}
+	if got, want := span.Days(math.MinInt), "-25269512429739111y293d"; got != want {
+		t.Errorf("Days(MinInt) = %q, want %q", got, want)
 	}
 }

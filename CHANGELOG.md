@@ -8,8 +8,9 @@ based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - `Format(math.MinInt64)` and `Days(math.MinInt)` no longer recurse until
-  a fatal stack overflow. `Days` gives the exact magnitude; `Format` gives
-  the maximum Duration's, the nearest that fits (#2).
+  a fatal stack overflow (#2).
+- `Format` no longer rounds the largest spans down a day: the maximum
+  Duration is `292y172d`, not `292y171d` (#3).
 
 ## [0.1.0] - 2026-10-17
 

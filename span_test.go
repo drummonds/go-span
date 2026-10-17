@@ -81,11 +81,15 @@ func TestDays(t *testing.T) {
 	}
 }
 
-// The minimum signed value has no positive counterpart, so negating it
-// overflows. Format shows the nearest representable magnitude with a sign;
-// Days, counting whole days, shows the exact one.
-func TestMinimumValue(t *testing.T) {
-	if got, want := span.Format(math.MinInt64), "-"+span.Format(math.MaxInt64); got != want {
+// The largest spans round to the nearest day even where that day is past
+// the maximum Duration. The minimum signed value has no positive
+// counterpart, so negating it overflows; it still shows as its magnitude
+// with a sign.
+func TestExtremes(t *testing.T) {
+	if got, want := span.Format(math.MaxInt64), "292y172d"; got != want {
+		t.Errorf("Format(MaxInt64) = %q, want %q", got, want)
+	}
+	if got, want := span.Format(math.MinInt64), "-292y172d"; got != want {
 		t.Errorf("Format(MinInt64) = %q, want %q", got, want)
 	}
 	if strconv.IntSize != 64 {

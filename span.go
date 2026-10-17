@@ -25,10 +25,10 @@ const (
 //	1y (365d) and up years, days            1y23d
 //
 // Below a day the result is a Go duration string, so time.ParseDuration
-// reads it back. A negative span is the positive one with a sign; the
-// minimum Duration, whose magnitude does not fit, shows the maximum's.
+// reads it back. A negative span is the positive one with a sign.
 func Format(d time.Duration) string {
 	if d == math.MinInt64 {
+		// Its magnitude does not fit; one nanosecond less rounds the same.
 		d++
 	}
 	if d < 0 {
@@ -45,7 +45,13 @@ func Format(d time.Duration) string {
 	case r < year:
 		return fmt.Sprintf("%dd%dh", r/day, r%day/time.Hour)
 	default:
-		return fmt.Sprintf("%dy%dd", r/year, r%year/day)
+		// Near the maximum, Round saturates rather than rounding up past
+		// it, so round to the day here, where the count cannot overflow.
+		n := uint64(r / day)
+		if r%day >= day/2 {
+			n++
+		}
+		return days(n)
 	}
 }
 

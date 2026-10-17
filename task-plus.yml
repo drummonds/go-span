@@ -10,3 +10,5 @@ pages_build:
 pages_deploy:
   - type: rsync
     site: go-span
+maturity:
+  code: 1
